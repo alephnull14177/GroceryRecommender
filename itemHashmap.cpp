@@ -50,13 +50,7 @@ void itemHashmap::insert(std::string key, int value) {
     for(int i=0; i<this->data[position].size(); i++) {
         //if key is in separate chain already, then just add to its vector
         if(this->data[position][i].first == key) {
-            //add item to the order list
-            for(int j=0; j<this->data[position][i].second.size(); j++) {
-                //no need to add repeats
-                if(this->data[position][i].second[j] == value) {
-                    return;
-                }
-            }
+            //add order to the item list
             this->data[position][i].second.push_back(value);
             return;
         }
@@ -94,4 +88,8 @@ bool itemHashmap::isElement(std::string key) {
     }
 
     return false;
+}
+
+std::vector<std::vector<std::pair<std::string,std::vector<int>>>> itemHashmap::retrieve() {
+    return this->data;
 }

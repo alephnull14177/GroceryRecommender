@@ -37,20 +37,20 @@ void structure() {
             std::cout << "Filling maps.";
             orderHashmap orders;
 
-//            itemHashmap items;
-//            readDataset(orders);
-//            std::cout << ".";
-//            readDataset(items);
-//            std::cout << "." << std::endl;
-
-            std::cout << ".";
-            readDataset(orders);
-            //printOut(orders.get(1808));
-            std::cout << ".";
             itemHashmap items;
+            readDataset(orders);
             std::cout << ".";
-            merge(orders, items);
+            readDataset(items);
             std::cout << "." << std::endl;
+
+//            std::cout << ".";
+//            readDataset(orders);
+//            //printOut(orders.get(1808));
+//            std::cout << ".";
+//            itemHashmap items;
+//            std::cout << ".";
+//            merge(orders, items);
+//            std::cout << "." << std::endl;
 
             std::string option;
             std::string item;
@@ -63,13 +63,20 @@ void structure() {
 
                 if(option == "1") {
                     std::cin.ignore();
+                    std::cout << "What would you like to add to cart?" << std::endl;
                     std::getline(std::cin, item);
                     if(!items.isElement(item)) {
-                        std::cout << "not in list" << std::endl;
+                        std::cout << "Not in store!" << std::endl;
                     }
                 }
                 else if(option == "2") {
-                    calculateRecommendations(orders, items, item);
+                    if(item == "") {
+                        std::cout << "Empty cart" << std::endl;
+                    }
+                    else {
+                        std::vector<std::string> result = calculateRecommendations(orders, items, item);
+                        printOut(result);
+                    }
                 }
                 else if(option == "3") {
                     EXIT_SUCCESS;
@@ -88,4 +95,10 @@ void structure() {
             std::cout << "not an option!" << std::endl;
         }
     } while(dataStructure!="3");
+}
+
+int main() {
+    std::cout << "Welcome to the Grocery Guru!" << std::endl;
+    std::cout << "Please select an option:" << std::endl;
+    entrance();
 }

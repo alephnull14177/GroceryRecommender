@@ -78,18 +78,37 @@ void readDataset(itemHashmap& items) {
     file.close();
 }
 
-void calculateRecommendations(orderHashmap& orders, itemHashmap& items, std::string& item) {
+std::vector<std::string> calculateRecommendations(orderHashmap& orders, itemHashmap& items, std::string& item) {
     std::vector<int> ordersPresent = items.get(item);
 
-    std::vector<std::pair<std::string, int>> histogram;
-
-    itemHashmap sums;
+    //create a histogram
+    itemHashmap histogram;
     for(int i=0; i<ordersPresent.size(); i++) {
         for(int j=0; j<orders.get(ordersPresent[i]).size(); j++) {
-            sums.insert(orders.get(ordersPresent[i])[j], 1);
+            histogram.insert(orders.get(ordersPresent[i])[j], 1);
         }
     }
 
-    int max = -1;
-    for()
+    int max = 0;
+    std::vector<std::pair<std::string, int>> common;
+    auto data = histogram.retrieve();
+
+    for(int i=0; i<data.size(); i++) {
+        for(int j=0; j<data[i].size(); j++) {
+            //push back items with highest occurence rate
+            std::string name = data[i][j].first;
+            int occurences = data[i][j].second.size();
+            if(occurences > max && name!=item) {
+                max = data[i][j].second.size();
+                common.push_back(std::make_pair(data[i][j].first, max));
+            }}
+
+    }
+    std::vector<std::string> result;
+
+    for(int i=common.size()-1; i>common.size()-4; i--) {
+        result.push_back(common[i].first);
+    }
+
+    return result;
 }

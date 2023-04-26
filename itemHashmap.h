@@ -20,7 +20,9 @@ public:
     itemHashmap() {this->data.resize(this->capacity);};
     void insert(std::string key, int value);
     std::vector<int>& get(std::string key);
+    std::vector<std::vector<std::pair<std::string,std::vector<int>>>> retrieve();
     bool isElement(std::string key);
+
 };
 
 
