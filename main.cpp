@@ -43,15 +43,6 @@ void structure() {
             readDataset(items);
             std::cout << "." << std::endl;
 
-//            std::cout << ".";
-//            readDataset(orders);
-//            //printOut(orders.get(1808));
-//            std::cout << ".";
-//            itemHashmap items;
-//            std::cout << ".";
-//            merge(orders, items);
-//            std::cout << "." << std::endl;
-
             std::string option;
             std::string item;
 
@@ -74,8 +65,13 @@ void structure() {
                         std::cout << "Empty cart" << std::endl;
                     }
                     else {
-                        std::vector<std::string> result = calculateRecommendations(orders, items, item);
-                        printOut(result);
+                        if(!items.isElement(item)) {
+                            std::cout << "Last item was not in store" << std::endl;
+                        }
+                        else {
+                            std::vector<std::string> result = calculateRecommendations(orders, items, item);
+                            printOut(result);
+                        }
                     }
                 }
                 else if(option == "3") {
