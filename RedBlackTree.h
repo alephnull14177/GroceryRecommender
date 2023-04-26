@@ -80,6 +80,7 @@ private:
                     }
                 }
                 else if (node == grandparent->right->left) {
+                    //FInodeME
                     RotateRight(parent);
                 }
                 else {
@@ -97,45 +98,42 @@ private:
         }
         root->color = BLACK;
     }
+
     void RotateLeft(TreeNode* node) {
         TreeNode* right = node->right;
         node->right = right->left;
-        if (right->left) {
-            right->left->parent = node;
-        }
+
+        if (node->right)
+            node->right->parent = node;
+
         right->parent = node->parent;
-        if (node->key == root->key) {
+
+        if (!node->parent)
             root = right;
-        }
-        else if (node->parent->left) {
-            if (node->key == node->parent->left->key) {
-                node->parent->left = right;
-            }
-            else {
-                node->parent->right = right;
-            }
-        }
+        else if (node == node->parent->left)
+            node->parent->left = right;
+        else
+            node->parent->right = right;
+
         right->left = node;
         node->parent = right;
     }
     void RotateRight(TreeNode* node) {
         TreeNode* left = node->left;
         node->left = left->right;
-        if (left->right) {
-            left->right->parent = node;
-        }
+
+        if (node->left)
+            node->left->parent = node;
+
         left->parent = node->parent;
-        if (node->key == root->key) {
+
+        if (!node->parent)
             root = left;
-        }
-        else if (node->parent->left) {
-            if (node->key == node->parent->left->key) {
-                node->parent->left = left;
-            }
-            else  {
-                node->parent->right = left;
-            }
-        }
+        else if (node == node->parent->left)
+            node->parent->left = left;
+        else
+            node->parent->right = left;
+
         left->right = node;
         node->parent = left;
     }
