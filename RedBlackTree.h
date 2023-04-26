@@ -184,6 +184,21 @@ private:
         return true;
     }
 
+    void findHelper(TreeNode* node, T1& key, bool& found) {
+        if (node == nullptr) {
+            return;
+        }
+        if (node->key == key) {
+            found = true;
+            return;
+        }
+
+        if (node->key > key)
+            findHelper(node->left, key, found);
+        else
+            findHelper(node->right, key, found);
+    }
+
     void GetKeysHelper(TreeNode* node, std::vector<T1>& keys) {
         if (node == nullptr) {
             return;
@@ -307,6 +322,12 @@ public:
         std::vector<T1> keys;
         GetKeysHelper(root, keys);
         return keys;
+    }
+
+    bool find(T1 key) {
+        bool found = false;
+        findHelper(root, key, found);
+        return found;
     }
 
     bool print() {

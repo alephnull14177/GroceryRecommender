@@ -1,5 +1,7 @@
 #include <iostream>
 #include <fstream>
+#include <algorithm>
+#include <map>
 #include "RedBlackTree.h"
 using namespace std;
 
@@ -10,7 +12,7 @@ void ReadDataset(RedBlackTree<int, string>& order_to_items, RedBlackTree<string,
         getline(file, header);
 
         string line;
-        int orderNum = 0;
+        int orderNum;
         string item = "";
         while (getline(file, line)) {
             orderNum = stoi(line.substr(0, 4));
@@ -23,8 +25,8 @@ void ReadDataset(RedBlackTree<int, string>& order_to_items, RedBlackTree<string,
     file.close();
 }
 
-string calculateRecommendations(RedBlackTree<string,int>& histogram, RedBlackTree<int, string>& order_to_items, RedBlackTree<string, int>& item_to_orders, string item) {
-    string recs = "";
+vector<string> calculateRecommendations(RedBlackTree<string,int>& histogram, RedBlackTree<int, string>& order_to_items, RedBlackTree<string, int>& item_to_orders, string item) {
+    vector<string> recs;
     // populate histogram
     auto orders_list = item_to_orders.Get(item);
     for (auto& i : orders_list) {
@@ -39,25 +41,30 @@ string calculateRecommendations(RedBlackTree<string,int>& histogram, RedBlackTre
 
     //histogram.print();
     // top 3 items
-    cout << "With " << item << " people also bought..." << endl;
-    auto iter = histogram.GetKeys();
-    string recommendation;
-    int peak = 0;
-    for (int z = 0; z < 3; ++z) {
-        for (auto &k: iter) {
-            if (histogram.Get(k).size() > peak) {
-                peak = histogram.Get(k).size();
-                recommendation = k;
+    if (item_to_orders.find(item)) {
+        auto iter = histogram.GetKeys();
+        //if ()
+        cout << "With " << item << " people also bought..." << endl;
+        string recommendation;
+        int peak = 0;
+        for (int z = 0; z < 3; ++z) {
+            for (auto &k: iter) {
+                if (histogram.Get(k).size() > peak) {
+                    peak = histogram.Get(k).size();
+                    recommendation = k;
+                }
             }
+            cout << z + 1 << ") " << recommendation << endl;
+            recs.push_back(recommendation);
+            histogram.ClearVals(recommendation);
+            peak = 0;
         }
-        cout << z+1 << ") " << recommendation << endl;
-        recs += recommendation;
-        recs += ",";
-        histogram.ClearVals(recommendation);
-        peak = 0;
+        histogram.clear();
     }
-    histogram.clear();
-    return recs.substr(0, recs.size()-1);
+    else {
+        //cout << "Item not in dataset\n";
+    }
+    return recs;
 }
 
 int main() {
@@ -70,11 +77,24 @@ int main() {
     //cout << item_to_orders.Get("whole milk").size();
 
     RedBlackTree<string, int> histogram;
-    string myleeString = calculateRecommendations(histogram, orders_to_items, item_to_orders, "soda");
+    string item = "bottled beer";
+    vector<string> myleeVector = calculateRecommendations(histogram, orders_to_items, item_to_orders, item);
 
-    cout << endl << "String for Mylee: " << myleeString;
 
-    histogram.print();
+    cout << endl << "Vector for Mylee:\n";
+    for (auto& iter : myleeVector) {
+        cout << iter << " ";
+    }
+
+//    cout << endl << endl << endl;
+    //histogram.print();
+
+//    auto mark = item_to_orders.Get(item);
+//    sort(mark.begin(), mark.end());
+//    for(auto& i : mark) {
+//        cout << i << " ";
+//    }
+//    cout << endl << mark.size();
 
     return 0;
 }
