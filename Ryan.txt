@@ -1,0 +1,80 @@
+#include <iostream>
+#include <fstream>
+#include "RedBlackTree.h"
+using namespace std;
+
+void ReadDataset(RedBlackTree<int, string>& order_to_items, RedBlackTree<string, int>& item_to_orders) {
+    std::ifstream file("Groceries_dataset.csv");
+    if (file.is_open()) {
+        string header;
+        getline(file, header);
+
+        string line;
+        int orderNum = 0;
+        string item = "";
+        while (getline(file, line)) {
+            orderNum = stoi(line.substr(0, 4));
+            item = line.substr(16);
+            //cout << orderNum << "->" << item << endl;
+            order_to_items.Insert(orderNum, item);
+            item_to_orders.Insert(item, orderNum);
+        }
+    }
+    file.close();
+}
+
+string calculateRecommendations(RedBlackTree<string,int>& histogram, RedBlackTree<int, string>& order_to_items, RedBlackTree<string, int>& item_to_orders, string item) {
+    string recs = "";
+    // populate histogram
+    auto orders_list = item_to_orders.Get(item);
+    for (auto& i : orders_list) {
+        auto orderNum = i;
+        auto itemsList = order_to_items.Get(orderNum);
+        for (auto& j : itemsList) {
+            if (j != item) {
+                histogram.Insert(j, 1);
+            }
+        }
+    }
+
+    //histogram.print();
+    // top 3 items
+    cout << "With " << item << " people also bought..." << endl;
+    auto iter = histogram.GetKeys();
+    string recommendation;
+    int peak = 0;
+    for (int z = 0; z < 3; ++z) {
+        for (auto &k: iter) {
+            if (histogram.Get(k).size() > peak) {
+                peak = histogram.Get(k).size();
+                recommendation = k;
+            }
+        }
+        cout << z+1 << ") " << recommendation << endl;
+        recs += recommendation;
+        recs += ",";
+        histogram.ClearVals(recommendation);
+        peak = 0;
+    }
+    histogram.clear();
+    return recs.substr(0, recs.size()-1);
+}
+
+int main() {
+    RedBlackTree<int, string> orders_to_items;
+    RedBlackTree<string, int> item_to_orders;
+    ReadDataset(orders_to_items, item_to_orders);
+
+    //orders_to_items.print();
+    //item_to_orders.print();
+    //cout << item_to_orders.Get("whole milk").size();
+
+    RedBlackTree<string, int> histogram;
+    string myleeString = calculateRecommendations(histogram, orders_to_items, item_to_orders, "soda");
+
+    cout << endl << "String for Mylee: " << myleeString;
+
+    histogram.print();
+
+    return 0;
+}
