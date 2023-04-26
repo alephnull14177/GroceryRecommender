@@ -89,9 +89,3 @@ void structure() {
         }
     } while(dataStructure!="3");
 }
-
-int main() {
-    std::cout << "Welcome to the Grocery Guru!" << std::endl;
-    std::cout << "Please select an option:" << std::endl;
-    entrance();
-}
