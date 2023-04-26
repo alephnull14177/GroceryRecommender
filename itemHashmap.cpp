@@ -4,7 +4,8 @@
 int itemHashmap::hash(std::string key) {
     int number = 0;
     for(int i=0; i<key.length(); i++) {
-        number += std::pow(31, i) * key[i];
+        //number += std::pow(31, i) * key[i];
+        number += key[i];
     }
     return (number % (int) this->capacity);
 }
@@ -81,4 +82,16 @@ std::vector<int>& itemHashmap::get(std::string key) {
             return this->data[position][i].second;
         }
     }
+}
+
+bool itemHashmap::isElement(std::string key) {
+    int possiblePosition = this->hash(key);
+
+    for(int i=0; i<this->data[possiblePosition].size(); i++) {
+        if(this->data[possiblePosition][i].first == key) {
+            return true;
+        }
+    }
+
+    return false;
 }
