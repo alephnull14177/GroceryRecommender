@@ -10,6 +10,7 @@
 #include <stdlib.h>
 #include "orderHashmap.h"
 #include "itemHashmap.h"
+#include "RedBlackTree.h"
 
 void entrance();
 void structure();
@@ -111,4 +112,65 @@ std::vector<std::string> calculateRecommendations(orderHashmap& orders, itemHash
     }
 
     return result;
+}
+
+std::vector<std::string> calculateRecommendations(RedBlackTree<std::string,int>& histogram, RedBlackTree<int, std::string>& order_to_items, RedBlackTree<std::string, int>& item_to_orders, std::string item) {
+    std::vector<std::string> recs;
+    // populate histogram
+    auto orders_list = item_to_orders.Get(item);
+    for (auto& i : orders_list) {
+        auto orderNum = i;
+        auto itemsList = order_to_items.Get(orderNum);
+        for (auto& j : itemsList) {
+            if (j != item) {
+                histogram.Insert(j, 1);
+            }
+        }
+    }
+
+    //histogram.print();
+    // top 3 items
+    if (item_to_orders.find(item)) {
+        auto iter = histogram.GetKeys();
+        //if ()
+        //std::cout << "With " << item << " people also bought: ";
+        std::string recommendation;
+        int peak = 0;
+        for (int z = 0; z < 3; ++z) {
+            for (auto &k: iter) {
+                if (histogram.Get(k).size() > peak) {
+                    peak = histogram.Get(k).size();
+                    recommendation = k;
+                }
+            }
+            //std::cout << z + 1 << ") " << recommendation << std::endl;
+            recs.push_back(recommendation);
+            histogram.ClearVals(recommendation);
+            peak = 0;
+        }
+        histogram.clear();
+    }
+    else {
+        std::cout << "Last input item was not in dataset\n";
+    }
+    return recs;
+}
+void ReadDataset(RedBlackTree<int, std::string>& order_to_items, RedBlackTree<std::string, int>& item_to_orders) {
+    std::ifstream file("Groceries_dataset.csv");
+    if (file.is_open()) {
+        std::string header;
+        getline(file, header);
+
+        std::string line;
+        int orderNum;
+        std::string item = "";
+        while (getline(file, line)) {
+            orderNum = stoi(line.substr(0, 4));
+            item = line.substr(16);
+            //cout << orderNum << "->" << item << endl;
+            order_to_items.Insert(orderNum, item);
+            item_to_orders.Insert(item, orderNum);
+        }
+    }
+    file.close();
 }

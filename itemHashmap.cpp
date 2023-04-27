@@ -79,14 +79,15 @@ std::vector<int>& itemHashmap::get(std::string key) {
 }
 
 bool itemHashmap::isElement(std::string key) {
+    //get possible hash
     int possiblePosition = this->hash(key);
 
+    //check separate chain for occurence
     for(int i=0; i<this->data[possiblePosition].size(); i++) {
         if(this->data[possiblePosition][i].first == key) {
             return true;
         }
     }
-
     return false;
 }
 

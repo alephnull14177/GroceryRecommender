@@ -10,8 +10,8 @@ private:
 
     std::vector<//vector for int key (order num) to string value (items) paired with frequency
     std::vector< //separate chaining
-            std::pair< //pair of key, value
-            std::string,std::vector<int>>>> data; //key is order num while value is a vector containing the items in each order
+    std::pair< //pair of key, value
+    std::string,std::vector<int>>>> data; //key is order num while value is a vector containing the items in each order
 
     int hash(std::string key);
     void rehash();
