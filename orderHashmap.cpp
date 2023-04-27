@@ -1,8 +1,7 @@
 #include "orderHashmap.h"
-#include <iostream>
 
-int orderHashmap::hash(int key) {
-    return (key % (int) this->capacity);
+long orderHashmap::hash(int key) {
+    return (key % (long) this->capacity);
 }
 
 void orderHashmap::rehash() {
