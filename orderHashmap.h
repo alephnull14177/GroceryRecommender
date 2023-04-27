@@ -5,7 +5,7 @@
 class orderHashmap {
 private:
     double LF = 0.75;
-    double capacity = 5;
+    double capacity = 5000;
     double size = 0;
 
     std::vector<//vector for int key (order num) to string value (items) paired with frequency
@@ -13,7 +13,7 @@ private:
     std::pair< //pair of key, value
     int,std::vector<std::string>>>> data; //key is order num while value is a vector containing the items in each order
 
-    int hash(int key);
+    long hash(int key);
     void rehash();
 
 public:

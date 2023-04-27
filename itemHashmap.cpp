@@ -1,13 +1,15 @@
 #include "itemHashmap.h"
-#include <cmath>
 
-int itemHashmap::hash(std::string key) {
-    int number = 0;
+long itemHashmap::hash(std::string key) {
+    unsigned long number = 0;
+    unsigned long power = 1;
+
+    //hash function
     for(int i=0; i<key.length(); i++) {
-        //number += std::pow(31, i) * key[i];
-        number += key[i];
+        number += power*key[i];
+        power = power*37;
     }
-    return (number % (int) this->capacity);
+    return (number % (long) this->capacity);
 }
 
 void itemHashmap::rehash() {
@@ -15,6 +17,7 @@ void itemHashmap::rehash() {
     copy.capacity = this->capacity * 2;
     copy.data.resize(copy.capacity);
 
+    //create a copy
     for(int i=0; i<this->data.size(); i++) {
         for(int j=0; j<this->data[i].size(); j++) {
             for(int k=0; k<this->data[i][j].second.size(); k++) {
@@ -91,6 +94,6 @@ bool itemHashmap::isElement(std::string key) {
     return false;
 }
 
-std::vector<std::vector<std::pair<std::string,std::vector<int>>>> itemHashmap::retrieve() {
+std::vector<std::vector<std::pair<std::string,std::vector<int>>>>& itemHashmap::retrieve() {
     return this->data;
 }
