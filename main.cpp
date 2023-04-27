@@ -310,6 +310,8 @@ void cart(RedBlackTree<int, std::string> &orders_to_items, RedBlackTree<std::str
                 }
                 std::cout << "***********************************************" << std::endl;
             }else if(option == "4") {
+                item_to_orders.clear();
+                orders_to_items.clear();
                 std::cout << std::endl;
                 std::cout << "******************GROCERIES********************" << std::endl;
                 for(int i = 1; i <= cart.size(); i++){
