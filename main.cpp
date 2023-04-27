@@ -188,13 +188,8 @@ void structure() {
             ////////////////////////// call  hash map ////////////////////////
             std::cout << "Filling maps.";
             orderHashmap orders;
-            std::cout << ".";
-            readDataset(orders);
-            std::cout << ".";
             itemHashmap items;
-            std::cout << ".";
-            merge(orders, items);
-            std::cout << "." << std::endl;
+            readDataset(orders, items);
             cart(orders, items);
             break;
 

@@ -14,35 +14,12 @@
 
 void entrance();
 void structure();
+void readDataset(orderHashmap& orders, itemHashmap& items);
+void ReadDataset(RedBlackTree<int, std::string>& order_to_items, RedBlackTree<std::string, int>& item_to_orders);
+std::vector<std::string> calculateRecommendations(orderHashmap& orders, itemHashmap& items, std::string& item);
+std::vector<std::string> calculateRecommendations(RedBlackTree<std::string,int>& histogram, RedBlackTree<int, std::string>& order_to_items, RedBlackTree<std::string, int>& item_to_orders, std::string item);
 
-void printOut(std::vector<std::string> thing) {
-    for(int i=0; i<thing.size(); i++) {
-        std::cout << thing[i] << ", ";
-    }
-    std::cout << std::endl;
-}
-
-void printOut(std::vector<int> thing) {
-    for(int i=0; i<thing.size(); i++) {
-        std::cout << thing[i] << ", ";
-    }
-    std::cout << std::endl;
-}
-
-void merge(orderHashmap& orders, itemHashmap& items) {
-    auto data = orders.retrieve();
-    for(int i=0; i<data.size(); i++) {
-        for(int j=0; j<data[i].size(); j++) {
-            for(int k=0; k<data[i][j].second.size(); k++) {
-                std::string key = data[i][j].second[k];
-                int value = data[i][j].first;
-                items.insert(key, value);
-            }
-        }
-    }
-}
-
-void readDataset(orderHashmap& orders) {
+void readDataset(orderHashmap& orders, itemHashmap& items) {
     std::ifstream file("Groceries_dataset.csv");
     if (file.is_open()) {
         std::string header;
@@ -54,25 +31,7 @@ void readDataset(orderHashmap& orders) {
         while (getline(file, line)) {
             orderNum = stoi(line.substr(0, 4));
             item = line.substr(16);
-            //cout << orderNum << "->" << item << endl;
             orders.insert(orderNum, item);
-        }
-    }
-    file.close();
-}
-
-void readDataset(itemHashmap& items) {
-    std::ifstream file("Groceries_dataset.csv");
-    if (file.is_open()) {
-        std::string header;
-        getline(file, header);
-
-        std::string line;
-        int orderNum = 0;
-        std::string item = "";
-        while (getline(file, line)) {
-            orderNum = stoi(line.substr(0, 4));
-            item = line.substr(16);
             items.insert(item, orderNum);
         }
     }
@@ -100,8 +59,8 @@ std::vector<std::string> calculateRecommendations(orderHashmap& orders, itemHash
             std::string name = data[i][j].first;
             int occurences = data[i][j].second.size();
             if(occurences > max && name!=item) {
-                max = data[i][j].second.size();
-                common.push_back(std::make_pair(data[i][j].first, max));
+                max = occurences;
+                common.push_back(std::make_pair(name, max));
             }}
 
     }
@@ -155,6 +114,7 @@ std::vector<std::string> calculateRecommendations(RedBlackTree<std::string,int>&
     }
     return recs;
 }
+
 void ReadDataset(RedBlackTree<int, std::string>& order_to_items, RedBlackTree<std::string, int>& item_to_orders) {
     std::ifstream file("Groceries_dataset.csv");
     if (file.is_open()) {
