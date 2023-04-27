@@ -272,8 +272,12 @@ private:
             return;
         }
 
-        ClearValsHelper(node->left, key);
-        ClearValsHelper(node->right, key);
+        if (node->key > key) {
+            ClearValsHelper(node->left, key);
+        }
+        else {
+            ClearValsHelper(node->right, key);
+        }
     }
 
 public:
