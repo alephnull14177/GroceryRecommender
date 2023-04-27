@@ -24,6 +24,3 @@ public:
     bool isElement(std::string key);
 
 };
-
-
-

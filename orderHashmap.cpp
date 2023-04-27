@@ -1,7 +1,6 @@
 #include "orderHashmap.h"
 
 long orderHashmap::hash(int key) {
-    //hash function
     return (key % (long) this->capacity);
 }
 
@@ -10,7 +9,6 @@ void orderHashmap::rehash() {
     copy.capacity = this->capacity * 2;
     copy.data.resize(copy.capacity);
 
-    //create copy in new positions
     for(int i=0; i<this->data.size(); i++) {
         for(int j=0; j<this->data[i].size(); j++) {
             for(int k=0; k<this->data[i][j].second.size(); k++) {
@@ -22,15 +20,13 @@ void orderHashmap::rehash() {
     }
 
     this->capacity = this->capacity*2;
-
-    //empty map
+    //empty list
     while(this->data.size() > 0) {
         this->data.pop_back();
     }
 
     this->data.resize(this->capacity);
 
-    //place items in new
     for(int i=0; i<copy.data.size(); i++) {
         for(int j=0; j<copy.data[i].size(); j++) {
             for(int k=0; k<copy.data[i][j].second.size(); k++) {
@@ -69,7 +65,6 @@ void orderHashmap::insert(int key, std::string value) {
 std::vector<std::string>& orderHashmap::get(int key) {
     int position = this->hash(key);
 
-    //loop throuhg separate chain
     for(int i=0; i<this->data[position].size(); i++) {
         if(this->data[position][i].first == key) {
             return this->data[position][i].second;
@@ -77,6 +72,6 @@ std::vector<std::string>& orderHashmap::get(int key) {
     }
 }
 
-std::vector<std::vector<std::pair<int,std::vector<std::string>>>>& orderHashmap::retrieve() {
+std::vector<std::vector<std::pair<int,std::vector<std::string>>>> orderHashmap::retrieve() {
     return this->data;
 }

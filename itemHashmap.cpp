@@ -4,7 +4,7 @@ long itemHashmap::hash(std::string key) {
     unsigned long number = 0;
     unsigned long power = 1;
 
-    //hash function with powers of 37
+    //hash function
     for(int i=0; i<key.length(); i++) {
         number += power*key[i];
         power = power*37;
@@ -17,7 +17,7 @@ void itemHashmap::rehash() {
     copy.capacity = this->capacity * 2;
     copy.data.resize(copy.capacity);
 
-    //create a copy of map with new hash placements
+    //create a copy
     for(int i=0; i<this->data.size(); i++) {
         for(int j=0; j<this->data[i].size(); j++) {
             for(int k=0; k<this->data[i][j].second.size(); k++) {
@@ -29,14 +29,13 @@ void itemHashmap::rehash() {
     }
 
     this->capacity = this->capacity*2;
-
-    //empty current map
+    //empty list
     while(this->data.size() > 0) {
         this->data.pop_back();
     }
 
-    //replace all the values in new position
     this->data.resize(this->capacity);
+
     for(int i=0; i<copy.data.size(); i++) {
         for(int j=0; j<copy.data[i].size(); j++) {
             for(int k=0; k<copy.data[i][j].second.size(); k++) {
@@ -72,11 +71,9 @@ void itemHashmap::insert(std::string key, int value) {
     }
 }
 
-//gets a vector tied to a key
 std::vector<int>& itemHashmap::get(std::string key) {
     int position = this->hash(key);
 
-    //loop through separate chain
     for(int i=0; i<this->data[position].size(); i++) {
         if(this->data[position][i].first == key) {
             return this->data[position][i].second;
@@ -97,7 +94,6 @@ bool itemHashmap::isElement(std::string key) {
     return false;
 }
 
-//grabs reference of data internals
 std::vector<std::vector<std::pair<std::string,std::vector<int>>>>& itemHashmap::retrieve() {
     return this->data;
 }
