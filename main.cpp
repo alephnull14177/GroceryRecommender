@@ -63,13 +63,11 @@ void cart(RedBlackTree<int, std::string> orders_to_items, RedBlackTree<std::stri
                 RedBlackTree<std::string, int> histogram;
                 std::vector<std::string> recommendations;
                 recommendations = calculateRecommendations(histogram, orders_to_items, item_to_orders, item);
-                if (item_to_orders.find(item)){
-                    std::cout << "With " << item << " people also bought: ";
-                    for(int i = 0; i <= recommendations.size() - 2; i++){
-                        std::cout << recommendations[i] << ", ";
-                    }
-                    std::cout << recommendations[recommendations.size() - 1] << std::endl;
+                std::cout << "With " << item << " people also bought: ";
+                for(int i = 0; i <= recommendations.size() - 2; i++){
+                    std::cout << recommendations[i] << ", ";
                 }
+                std::cout << recommendations[recommendations.size() - 1] << std::endl;
             }else if(option == "3"){
                 std::cout << "******************GROCERIES********************" << std::endl;
                 for(int i = 1; i <= cart.size(); i++){
