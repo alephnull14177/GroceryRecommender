@@ -20,7 +20,7 @@ public:
     orderHashmap() {this->data.resize(this->capacity);};
     void insert(int key, std::string value);
     std::vector<std::string>& get(int key);
-    std::vector<std::vector<std::pair<int,std::vector<std::string>>>> retrieve();
+    std::vector<std::vector<std::pair<int,std::vector<std::string>>>>& retrieve();
 };
 
 
