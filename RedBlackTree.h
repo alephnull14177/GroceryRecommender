@@ -258,30 +258,9 @@ private:
         // R
         clearHelper(node->right);
         // N
-        root = RemoveLeaf(root, node->key);
+        delete node;
         // decrement size - tracks if tree is truly being cleared
         --size;
-    }
-    TreeNode* RemoveLeaf(TreeNode* node, T1& key) {
-        // dead end
-        if (node == nullptr) {
-            return nullptr;
-        }
-        // recurse left
-        if (node->key > key) {
-            node->left = RemoveLeaf(node->left, key);
-            return node;
-        }
-        // recurse right
-        else if (node->key < key) {
-            node->right = RemoveLeaf(node->right, key);
-            return node;
-        }
-        // if node-<key == key
-        else {
-            delete node;
-            return nullptr;
-        }
     }
 
     void ClearValsHelper(TreeNode* node, T1& key) {
